@@ -8,6 +8,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Passenger.Core.Repositories;
+using Passenger.Infrastructure.Mappers;
 using Passenger.Infrastructure.Services;
 
 namespace Passenger.Api
@@ -30,9 +31,10 @@ namespace Passenger.Api
         public void ConfigureServices(IServiceCollection services)
         {
             // Add framework services.
-          // services.AddMvc();
+            services.AddMvc();
             services.AddScoped<IUserService, UserService>();
             services.AddScoped<IUserRepository, InMemoryUserRepository>();
+            services.AddSingleton(AutoMapperConfig.Initialize());
             services.AddRazorPages();
             
    

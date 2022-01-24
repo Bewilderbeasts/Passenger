@@ -5,8 +5,13 @@ public class Vehicle //ValueObject
 		public string Brand { get; protected set; }
 		public string Name { get; protected set; }
 		public int Seats { get; protected set; }
-	
-		public Vehicle (string brand, string name, int seats)
+
+		protected Vehicle ()
+		{
+			
+
+		}
+		protected Vehicle (string brand, string name, int seats)
 		{
 			Brand = brand;
 			Name = name;
@@ -59,6 +64,7 @@ public class Vehicle //ValueObject
 			Seats = seats;
 		}
 
-		
+		public static Vehicle Create(string brand, string name, int seats)
+			=> new Vehicle(brand, name, seats);
 		
 }
