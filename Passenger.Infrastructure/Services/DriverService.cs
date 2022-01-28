@@ -1,6 +1,7 @@
 using System;
 using Passenger.Core.Repositories;
 using Passenger.Infrastructure.DTO;
+using System.Threading.Tasks;
 
 namespace Passenger.Infrastructure.Services
 {
@@ -20,6 +21,11 @@ namespace Passenger.Infrastructure.Services
             {
                 //ID
             };
+        }
+
+        public Task<DriverDto> GetAsync(Guid userId)
+        {
+            throw new NotImplementedException();
         }
     }
 }
