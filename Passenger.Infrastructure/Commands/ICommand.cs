@@ -1,4 +1,4 @@
-namespace Passenger.Api.Commands
+namespace Passenger.Infrastructure.Commands
 {
     public class ICommand
     {
