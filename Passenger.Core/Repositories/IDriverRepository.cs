@@ -6,7 +6,7 @@ using Passenger.Core.Domain;
 
 namespace Passenger.Core.Repositories
 {
-    public interface IDriverRepository
+    public interface IDriverRepository : IRepository
     {
         Task<Driver> GetAsync(Guid userId);
         Task<IEnumerable<Driver>> GetAllAsync();

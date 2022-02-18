@@ -9,9 +9,9 @@ public class InMemoryUserRepository : IUserRepository
 
     public static ISet<User> _users = new HashSet<User>
     {
-        new User("user1@email.com", "user1", "secret", "salt"),
-        new User("user2@email.com", "user2", "secret", "salt"),
-        new User("user2@email.com", "user3", "secret", "salt")
+        new User("user1@email.com", "user1", "secret", "user", "salt"),
+        new User("user2@email.com", "user2", "secret", "user", "salt"),
+        new User("user2@email.com", "user3", "secret", "user", "salt")
     };
     
 

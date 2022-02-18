@@ -36,14 +36,15 @@ namespace Passenger.Api
         {
             // Add framework services.
             services.AddMvc();
-            services.AddScoped<IUserService, UserService>();
-            services.AddScoped<IUserRepository, InMemoryUserRepository>();
-            services.AddSingleton(AutoMapperConfig.Initialize());
+            // services.AddScoped<IUserService, UserService>();
+            // services.AddScoped<IUserRepository, InMemoryUserRepository>();
+            // services.AddSingleton(AutoMapperConfig.Initialize());
             services.AddRazorPages();
 
             var builder = new ContainerBuilder();
             builder.Populate(services);
-            builder.RegisterModule<CommandModule>();
+            builder.RegisterModule(new ContainerModule(Configuration));
+            builder.RegisterModule(new SettingsModule(Configuration));
             ApplicationContainer = builder.Build();
 
             return new AutofacServiceProvider(ApplicationContainer);
