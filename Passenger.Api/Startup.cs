@@ -20,6 +20,7 @@ using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.Extensions.Options;
+using Newtonsoft.Json;
 
 namespace Passenger.Api
 {
@@ -46,7 +47,8 @@ namespace Passenger.Api
         {
             services.AddMemoryCache();
             // Add framework services.
-            services.AddMvc();
+            services.AddMvc()
+                .AddJsonOptions(x => x.JsonSerializerOptions.WriteIndented = true);
             services.AddOptions();
             //services.AddRazorPages();
             

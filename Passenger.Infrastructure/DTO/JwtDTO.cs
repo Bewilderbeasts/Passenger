@@ -1,6 +1,6 @@
 namespace Passenger.Infrastructure.DTO
 {
-    public class JwtDTO
+    public class JwtDto
     {
         public string Token {get; set;}
         public long Expiry {get; set;}

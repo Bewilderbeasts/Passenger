@@ -39,7 +39,7 @@ namespace Passenger.Infrastructure.Services
         
         
 
-        public JwtDTO CreateToken(string email, string role)
+        public JwtDto CreateToken(Guid userId, string role)
         {
            var now = DateTime.UtcNow;
            
@@ -48,7 +48,8 @@ namespace Passenger.Infrastructure.Services
             var minutes3 = Convert.ToDouble(_jwtSettings.ExpiryMinutes);
             var claims = new Claim[]
             {
-                new Claim(JwtRegisteredClaimNames.Sub, email),
+                new Claim(JwtRegisteredClaimNames.Sub, userId.ToString()),
+                new Claim(JwtRegisteredClaimNames.UniqueName, userId.ToString()),
                 new Claim(ClaimTypes.Role, role),
                 new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
                 new Claim(JwtRegisteredClaimNames.Iat, now.ToTimestamp().ToString(), ClaimValueTypes.Integer64)
@@ -69,7 +70,7 @@ namespace Passenger.Infrastructure.Services
             );
             var token = new JwtSecurityTokenHandler().WriteToken(jwt);
 
-            return new JwtDTO
+            return new JwtDto
             {
                 Token = token,
                 Expiry = expiry.ToTimestamp()

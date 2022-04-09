@@ -17,9 +17,9 @@ namespace Passenger.Infrastructure.Handlers.Drivers
         {
             //implement create driver logic
             await _driverService.CreateAsync(command.UserId);
-            var vechicle = command.Vehicle;
-            await _driverService.SetVechicleAsync(command.UserId, vechicle.Brand, 
-                                    vechicle.Name, vechicle.Seats);
+            var vehicle = command.Vehicle;
+            await _driverService.SetVehicle(command.UserId, vehicle.Brand, 
+                                    vehicle.Name);
         }
     }
 }

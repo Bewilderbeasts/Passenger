@@ -20,15 +20,15 @@ namespace Passenger.Api.Controllers
             _jwtHandler = jwtHandler;
         }
         
-        [Microsoft.AspNetCore.Mvc.Route("")]
-        [HttpGet]
-        [Microsoft.AspNetCore.Mvc.Route("token")]
-        public IActionResult Get()
-         {
-            var token = _jwtHandler.CreateToken("user1@gmail.com", "user");            
+        // [Microsoft.AspNetCore.Mvc.Route("")]
+        // [HttpGet]
+        // [Microsoft.AspNetCore.Mvc.Route("token")]
+        // public IActionResult Get()
+        //  {
+        //     var token = _jwtHandler.CreateToken("user1@gmail.com", "user");            
          
-            return Json(token);
-         }
+        //     return Json(token);
+        //  }
 
 
         

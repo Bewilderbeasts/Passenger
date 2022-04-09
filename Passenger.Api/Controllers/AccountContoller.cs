@@ -19,15 +19,15 @@ namespace Passenger.Api.Controllers
             _jwtHandler = jwtHandler;
         }
         
-        [Microsoft.AspNetCore.Mvc.Route("")]
-        [HttpGet]
-        [Microsoft.AspNetCore.Mvc.Route("token")]
-        public IActionResult Get()
-         {
-            var token = _jwtHandler.CreateToken("user1@gmail.com", "user");            
+        // [Microsoft.AspNetCore.Mvc.Route("")]
+        // [HttpGet]
+        // [Microsoft.AspNetCore.Mvc.Route("token")]
+        // public IActionResult Get()
+        //  {
+        //     var token = _jwtHandler.CreateToken("user1@gmail.com", "user");            
          
-            return Json(token);
-         }
+        //     return Json(token);
+        //  }
     // [Microsoft.AspNetCore.Mvc.Route("Account")] 
     // public class AccountContoller : ApiControllerBase
     // {
@@ -48,7 +48,7 @@ namespace Passenger.Api.Controllers
          [Route("password")]
          public async Task<IActionResult> Put([FromBody]ChangeUserPassword command)
          {
-            await CommandDispatcher.DispatchAsync(command);            
+            await DispatchAsync(command);            
          
             return NoContent();
          }

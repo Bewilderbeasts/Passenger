@@ -9,18 +9,22 @@ namespace Passenger.Infrastructure.Services
     {
         private readonly IUserService _userService;
         private readonly IDriverService _driverService;
+        private readonly IDriverRouteService _driverRouteService;
         private readonly ILogger<DataInitializer> _logger;
-        public DataInitializer(IUserService userService, IDriverService driverService, ILogger<DataInitializer> logger)
+        public DataInitializer(IUserService userService, IDriverService driverService, 
+                    IDriverRouteService driverRouteService,
+                    ILogger<DataInitializer> logger)
         {
             _userService = userService;
             _driverService = driverService;
+            _driverRouteService = driverRouteService;
             _logger = logger;
         }
         public async Task SeedAsync()
         {
             _logger.LogTrace("Initializing data...");
             var tasks = new List<Task>();
-            for (var i = 1; i <=10; i++)
+            for(var i = 1; i <=10; i++)
             {
                 var userId = Guid.NewGuid();
                 var username = $"user{i}";
@@ -28,8 +32,11 @@ namespace Passenger.Infrastructure.Services
                 tasks.Add(_userService.RegisterAsync(userId, $"{username}@test.com",
                     username, "secret", "user"));
                 tasks.Add(_driverService.CreateAsync(userId));
-                tasks.Add(_driverService.SetVechicleAsync(userId, "BMW", "i8", 5));
-                _logger.LogTrace($"Created a new driver for: '{username}'.");    
+                tasks.Add(_driverService.SetVehicle(userId, "BMW", "i8"));
+                _logger.LogTrace($"Created a new driver for: '{username}'.");
+                tasks.Add(_driverRouteService.AddAsync(userId, "Default route", 1,1,2,2));
+                tasks.Add(_driverRouteService.AddAsync(userId, "Work route", 4,6,7,8));
+                _logger.LogTrace($"Created a new route for: '{username}'.");      
             }
 
              for (var i = 1; i <=3; i++)
