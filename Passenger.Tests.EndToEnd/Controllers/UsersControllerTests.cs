@@ -18,12 +18,12 @@ namespace Passenger.Tests.EndToEnd.Controllers
         [Fact]
         public async Task given_valid_email_user_should_exist()
         {
-            var email ="user1@email.com";
+            var email ="user1@test.com";
             var user = await GetUserAsync(email);
 
-            Assert.Equal(user.Email,
-            email);   
-            }
+            Assert.Equal(user.Email, email);  
+            
+        }
 
 
         [Fact]
@@ -33,8 +33,8 @@ namespace Passenger.Tests.EndToEnd.Controllers
             var response = await Client.GetAsync($"users/{email}");
 
 
-            Assert.Equal(response.StatusCode,
-            HttpStatusCode.NotFound);   
+            Assert.Equal(HttpStatusCode.NotFound,
+                            response.StatusCode);   
         }    
 
         [Fact]
@@ -50,8 +50,8 @@ namespace Passenger.Tests.EndToEnd.Controllers
             var payload = GetPayLoad(command);
             var response = await Client.PostAsync("users", payload);
 
-            Assert.Equal(response.StatusCode,
-            HttpStatusCode.Created); 
+            Assert.Equal(HttpStatusCode.Created,
+                            response.StatusCode); 
 
             var user = await GetUserAsync(command.Email);
 

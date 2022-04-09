@@ -22,7 +22,7 @@ namespace Passenger.Infrastructure.Repositories
             _drivers.Add(driver);
         }
 
-        public async Task<IEnumerable<Driver>> GetAllAsync()
+        public async Task<IEnumerable<Driver>> BrowseAsync()
             => await Task.FromResult (_drivers);
 
         public async Task UpdateAsync(Driver driver)

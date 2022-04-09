@@ -19,9 +19,9 @@ public class User
 
     }
 
-    public User(string email, string username, string password, string salt,string role)
+    public User(Guid userId, string email, string username, string password, string salt,string role)
     {
-        Id = Guid.NewGuid();
+        Id = userId;
         Email = email.ToLowerInvariant();
         Password = password;
         Salt = salt;

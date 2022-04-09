@@ -16,7 +16,10 @@ namespace Passenger.Infrastructure.Handlers.Drivers
         public async Task HandleAsync(CreateDriver command)
         {
             //implement create driver logic
-            await Task.CompletedTask;
+            await _driverService.CreateAsync(command.UserId);
+            var vechicle = command.Vehicle;
+            await _driverService.SetVechicleAsync(command.UserId, vechicle.Brand, 
+                                    vechicle.Name, vechicle.Seats);
         }
     }
 }

@@ -7,12 +7,8 @@ using Passenger.Core.Repositories;
 public class InMemoryUserRepository : IUserRepository
 {
 
-    public static ISet<User> _users = new HashSet<User>
-    {
-        new User("user1@email.com", "user1", "secret", "user", "salt"),
-        new User("user2@email.com", "user2", "secret", "user", "salt"),
-        new User("user2@email.com", "user3", "secret", "user", "salt")
-    };
+    public static ISet<User> _users = new HashSet<User>();
+    
     
 
     public async Task<User> GetAsync(Guid id)
@@ -40,5 +36,10 @@ public class InMemoryUserRepository : IUserRepository
     public async Task UpdateAsync(User user)
     {
        await Task.CompletedTask;
+    }
+
+    public Task<IEnumerable<User>> BrowseAsync()
+    {
+        throw new NotImplementedException();
     }
 }

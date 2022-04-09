@@ -25,10 +25,10 @@ namespace Passenger.Tests.EndToEnd.Controllers
             var response = await Client.PutAsync("account/password", payload);
             
 
-            // Assert.Equal(response.StatusCode,
-            // HttpStatusCode.NoContent); 
             Assert.Equal(response.StatusCode,
-            HttpStatusCode.NotFound); 
+            HttpStatusCode.NoContent); 
+            // Assert.Equal(response.StatusCode,
+            // HttpStatusCode.NotFound); 
         }
 
     }

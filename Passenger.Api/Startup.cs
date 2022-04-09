@@ -44,10 +44,12 @@ namespace Passenger.Api
         // This method gets called by the runtime. Use this method to add services to the container.
         public IServiceProvider ConfigureServices(IServiceCollection services)
         {
+            services.AddMemoryCache();
             // Add framework services.
             services.AddMvc();
             services.AddOptions();
             //services.AddRazorPages();
+            
 
             
             services.Configure<JwtSettings>(Configuration.GetSection("JwtSettings"));
@@ -55,6 +57,7 @@ namespace Passenger.Api
 
             var sp = services.BuildServiceProvider();
             var jwtSettings = sp.GetService<JwtSettings>();
+            
 
             
             var signingKey = Configuration.GetSection("JwtSettings:Key").Value;
@@ -118,6 +121,14 @@ namespace Passenger.Api
         var loggerFactory2 = LoggerFactory.Create(builder => builder.AddDebug());
         appLifetime.ApplicationStopped.Register(() => ApplicationContainer.Dispose());
 
+        
+        var generalSettings = app.ApplicationServices.GetService<GeneralSettings>();
+            if (generalSettings.SeedData)
+            {
+                
+                var dataInitializer = app.ApplicationServices.GetService<IDataInitializer>();
+                dataInitializer.SeedAsync();
+            }
     
    
         app.UseDeveloperExceptionPage();
