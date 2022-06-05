@@ -7,5 +7,6 @@ namespace Passenger.Infrastructure.DTO
         public Guid Id { get; protected set; }
 		public Node StartNode { get;  set; }
 		public Node EndNode { get;  set; }
+        public double Distance {get; set;}
     }
 }

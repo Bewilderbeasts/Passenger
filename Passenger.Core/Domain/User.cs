@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Text.RegularExpressions;
+using Passenger.Core.Domain;
 
 public class User
 {   
@@ -39,11 +40,11 @@ public class User
     {
         if (!NameRegex.IsMatch(username))
         {
-            throw new Exception("Username is invalid.");
+            throw new DomainException(ErrorCodes.InvalidUsername, "Username is invalid.");
         }
         if (String.IsNullOrEmpty(username))
         {
-             throw new Exception("Username cannot be empty.");
+             throw new DomainException(ErrorCodes.InvalidUsername, "Username cannot be empty.");
         }
 
         Username = username.ToLowerInvariant();
@@ -68,15 +69,15 @@ public class User
     {
         if (string.IsNullOrWhiteSpace(password))
         {
-            throw new Exception("Password is invalid.");
+             throw new DomainException(ErrorCodes.InvalidPassword, "Password cannot be empty.");
         }
         if (password.Length < 4 )
         {
-            throw new Exception("Password must be at least 4 charatcers long.");
+            throw new DomainException(ErrorCodes.InvalidPassword, "Password must be at least 4 charatcers long.");
         }
         if (password.Length > 16 )
         {
-            throw new Exception("Password must have maximum of 16 charatcers.");
+            throw new DomainException(ErrorCodes.InvalidPassword, "Password must have maximum of 16 charatcers.");
         }
         if (Password == password)
         {

@@ -9,7 +9,7 @@ public interface IUserRepository : IRepository
 {
     Task<User> GetAsync (Guid id);
     Task<User> GetAsync (string email);
-    Task<IEnumerable<User>> BrowseAsync();
+    Task<IEnumerable<User>> GetAllAsync();
     Task AddAsync(User user);
     Task UpdateAsync(User user);
     Task RemoveAsync(Guid id);

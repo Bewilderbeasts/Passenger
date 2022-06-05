@@ -21,6 +21,10 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.Extensions.Options;
 using Newtonsoft.Json;
+using Microsoft.AspNetCore.Diagnostics;
+using Passenger.Infrastructure.Extensions;
+//using NLog.Extensions.Logging;
+using NLog.Web;
 
 namespace Passenger.Api
 {
@@ -40,7 +44,12 @@ namespace Passenger.Api
 
          public IConfiguration Configuration { get; }
         
-
+         public void ConfigureLogging(ILoggingBuilder logging)
+        {
+            logging.ClearProviders();
+            logging.AddNLog("nlog.config");
+            logging.AddNLogWeb();
+        }
 
         // This method gets called by the runtime. Use this method to add services to the container.
         public IServiceProvider ConfigureServices(IServiceCollection services)
@@ -52,10 +61,10 @@ namespace Passenger.Api
             services.AddOptions();
             //services.AddRazorPages();
             
-
+    
             
             services.Configure<JwtSettings>(Configuration.GetSection("JwtSettings"));
-            
+            services.Configure<GeneralSettings>(Configuration.GetSection("general")) ;
 
             var sp = services.BuildServiceProvider();
             var jwtSettings = sp.GetService<JwtSettings>();
@@ -65,7 +74,7 @@ namespace Passenger.Api
             var signingKey = Configuration.GetSection("JwtSettings:Key").Value;
             var issuer = Configuration.GetSection("JwtSettings:Issuer").Value;
 
-
+            
 
             // var appSettingsSection = Configuration.GetSection("JwtSettings");
 
@@ -119,18 +128,15 @@ namespace Passenger.Api
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env, ILoggerFactory loggerFactory, IApplicationLifetime appLifetime)
         {
             //loggerFactory.AddConsole(Configuration.GetSection("Logging"));
-        var loggerFactoryZ = LoggerFactory.Create(builder => builder.AddConsole());
-        var loggerFactory2 = LoggerFactory.Create(builder => builder.AddDebug());
-        appLifetime.ApplicationStopped.Register(() => ApplicationContainer.Dispose());
+        // var loggerFactoryZ = LoggerFactory.Create(builder => builder.AddConsole());
+        // var loggerFactory2 = LoggerFactory.Create(builder => builder.AddDebug());
 
-        
-        var generalSettings = app.ApplicationServices.GetService<GeneralSettings>();
+
+          var generalSettings = Configuration.GetSettings<GeneralSettings>();
             if (generalSettings.SeedData)
             {
-                
-                var dataInitializer = app.ApplicationServices.GetService<IDataInitializer>();
-                dataInitializer.SeedAsync();
-            }
+                app.ApplicationServices.GetService<IDataInitializer>()!.SeedAsync().Wait();
+            }    
     
    
         app.UseDeveloperExceptionPage();
@@ -148,9 +154,13 @@ namespace Passenger.Api
             
             endpoints.MapControllers();
         });
+        //app.UseMiddleware(typeof(ExceptionHandlerMiddleware));
 
         
            //app.UseMvc();
+           var opts = new ExceptionHandlerOptions{ ExceptionHandler = ctx => Task.CompletedTask };
+           app.UseExceptionHandler(opts);
+           appLifetime.ApplicationStopped.Register(() => ApplicationContainer.Dispose());
         }
     }
 }

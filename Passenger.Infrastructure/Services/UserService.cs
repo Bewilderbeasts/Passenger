@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using AutoMapper;
 using Passenger.Core.Repositories;
 using Passenger.Infrastructure.DTO;
+using Passenger.Infrastructure.Exceptions;
 
 namespace Passenger.Infrastructure.Services
 {
@@ -25,22 +26,25 @@ namespace Passenger.Infrastructure.Services
         {
             var user = await _userRepository.GetAsync(email);
 
-            return _mapper.Map<User, UserDto>(user);
+           return _mapper.Map<User,UserDto>(user);
         }
 
         public async Task<IEnumerable<UserDto>> BrowseAsync()
         {
-            var drivers = await _userRepository.BrowseAsync();
+            var drivers = await _userRepository.GetAllAsync();
 
-            return _mapper.Map<IEnumerable<User>, IEnumerable<UserDto>>(drivers);
+            return _mapper.Map<IEnumerable<User>,IEnumerable<UserDto>>(drivers);
         }
+
+        //  public async Task<IEnumerable<UserDto>> GetAll()
+        // => _mapper.Map<IEnumerable<UserDto>>(await _userRepository.BrowseAsync());
 
         public async Task LoginAsync(string email, string password)
         {
             var user = await _userRepository.GetAsync(email);
              if(user != null)
             {
-              throw new Exception($"User with email: '{email}' does not exist.");
+               throw new ServiceException(Infrastructure.Exceptions.ErrorCodes.InvalidCredentials, "Invalid credentials.");
              }
            
             var hash = _encrypter.GetHash(password, user.Salt);
@@ -48,7 +52,7 @@ namespace Passenger.Infrastructure.Services
             {
                 return;
             }
-            throw new Exception("Invalid credentials.");
+            throw new ServiceException(ErrorCodes.InvalidCredentials, "Invalid credentials.");
             
         }
 
@@ -57,7 +61,7 @@ namespace Passenger.Infrastructure.Services
              var user = await _userRepository.GetAsync(email);
              if(user != null)
             {
-              throw new Exception($"User with email: '{email}' already exists.");
+              throw new ServiceException(ErrorCodes.EmailInUse, $"User with email: '{email}' already exists.");
              }
             var salt = _encrypter.GetSalt(password);
             var hash = _encrypter.GetHash(password, salt);

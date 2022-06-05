@@ -7,22 +7,24 @@ public class Route
 	
 		public string Name { get; protected set; }
 		public Guid Id { get; protected set; }
-		public Node StartNode { get; protected set; }
-		public Node EndNode { get; protected set; }
+		public Node Start { get; protected set; }
+		public Node End { get; protected set; }
+		public double Distance { get; protected set; }
 
 
 		protected Route()
 		{
-			Id = Guid.NewGuid();
+			//Id = Guid.NewGuid();
 		}
-		protected Route(string name, Node startnode, Node endnode)
+		protected Route(string name, Node start, Node end, double distance)
 		{
 			Name = name;
-			StartNode = startnode;
-			EndNode = endnode;
+			Start = start;
+			End = end;
+			Distance = distance;
 		}
 
-		public static Route Create(string name, Node startnode, Node endnode)
-			=> new Route(name, startnode, endnode);
+		public static Route Create(string name, Node start, Node end, double distance)
+			=> new Route(name, start, end, distance);
 	}
 }
