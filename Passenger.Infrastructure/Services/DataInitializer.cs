@@ -23,15 +23,14 @@ namespace Passenger.Infrastructure.Services
         }
         public async Task SeedAsync()
         {
-
-             var users = await _userService.BrowseAsync();
+            var users = await _userService.BrowseAsync();
             if(users.Any())
             {
-                _logger.LogTrace("Data was already initialized.");
+                
 
                 return; 
             }
-
+            
             _logger.LogTrace("Initializing data...");
             var tasks = new List<Task>();
             for(var i = 1; i <=10; i++)
@@ -39,16 +38,17 @@ namespace Passenger.Infrastructure.Services
                 var userId = Guid.NewGuid();
                 var username = $"user{i}";
 
-                _logger.LogTrace($"Created a new user: '{username}'.");
-                tasks.Add(_userService.RegisterAsync(userId, $"{username}@test.com",
-                    username, "secret", "user"));
-                    
-                tasks.Add(_driverService.CreateAsync(userId));
-                tasks.Add(_driverService.SetVehicle(userId, "BMW", "i8"));
-
+                //_logger.LogTrace($"Created a new user: '{username}'.");
+                await _userService.RegisterAsync(userId, $"user{i}@test.com",
+                    username, "secret", "user");
+                _logger.LogTrace($"Adding user: '{username}'.");
+                
+                await _driverService.CreateAsync(userId);
+                await _driverService.SetVehicle(userId, "BMW", "i8");
                 _logger.LogTrace($"Created a new driver for: '{username}'.");
-                tasks.Add(_driverRouteService.AddAsync(userId, "Default route", 1,1,2,2));
-                tasks.Add(_driverRouteService.AddAsync(userId, "Work route", 4,6,7,8));
+
+                await _driverRouteService.AddAsync(userId, "Default route", 1,1,2,2);
+                await _driverRouteService.AddAsync(userId, "Work route", 4,6,7,8);
 
                 _logger.LogTrace($"Created a new route for: '{username}'.");      
             }
@@ -58,7 +58,7 @@ namespace Passenger.Infrastructure.Services
                 var userId = Guid.NewGuid();
                 var username = $"admin{i}";
                 _logger.LogTrace($"Created a new admin: '{username}'.");
-                tasks.Add(_userService.RegisterAsync(userId, $"{username}@test.com",
+                tasks.Add(_userService.RegisterAsync(userId, $"admin{i}@test.com",
                     username, "secret", "admin"));
             }
             await Task.WhenAll(tasks);

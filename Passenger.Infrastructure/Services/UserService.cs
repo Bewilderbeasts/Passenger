@@ -29,7 +29,7 @@ namespace Passenger.Infrastructure.Services
            return _mapper.Map<User,UserDto>(user);
         }
 
-        public async Task<IEnumerable<UserDto>> BrowseAsync()
+         public async Task<IEnumerable<UserDto>> BrowseAsync()
         {
             var drivers = await _userRepository.GetAllAsync();
 

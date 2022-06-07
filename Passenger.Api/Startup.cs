@@ -30,7 +30,7 @@ namespace Passenger.Api
 {
     public class Startup
     {
-       
+        public IConfiguration Configuration { get; }
         public IContainer ApplicationContainer {get; private set;}
         public Startup(IWebHostEnvironment env)
         {
@@ -42,8 +42,6 @@ namespace Passenger.Api
             Configuration = builder.Build();
         }
 
-         public IConfiguration Configuration { get; }
-        
          public void ConfigureLogging(ILoggingBuilder logging)
         {
             logging.ClearProviders();
@@ -52,9 +50,10 @@ namespace Passenger.Api
         }
 
         // This method gets called by the runtime. Use this method to add services to the container.
-        public IServiceProvider ConfigureServices(IServiceCollection services)
+        public void ConfigureServices(IServiceCollection services)
         {
             services.AddMemoryCache();
+            services.AddAuthorization(x => x.AddPolicy("admin", p => p.RequireRole("admin")));
             // Add framework services.
             services.AddMvc()
                 .AddJsonOptions(x => x.JsonSerializerOptions.WriteIndented = true);
@@ -73,15 +72,6 @@ namespace Passenger.Api
             
             var signingKey = Configuration.GetSection("JwtSettings:Key").Value;
             var issuer = Configuration.GetSection("JwtSettings:Issuer").Value;
-
-            
-
-            // var appSettingsSection = Configuration.GetSection("JwtSettings");
-
-
-            // services.Configure<JwtSettings>(appSettingsSection); //get key from appSettings 
-            // var appSettings = appSettingsSection.Get<JwtSettings>(); 
-            // var key = Encoding.UTF8.GetBytes(appSettings.Key); 
 
             services.AddAuthorization(options =>
             {
@@ -111,14 +101,19 @@ namespace Passenger.Api
                     };
                 });
 
-            var builder = new ContainerBuilder();
-            builder.Populate(services);
-            builder.RegisterModule(new ContainerModule(Configuration));
-            //builder.RegisterModule(new SettingsModule(Configuration));
-            ApplicationContainer = builder.Build();
+          
+            //ApplicationContainer = builder.Build();
 
-            return new AutofacServiceProvider(ApplicationContainer);
+            //return new AutofacServiceProvider(ApplicationContainer);
    
+        }
+
+        public void ConfigureContainer(ContainerBuilder builder)
+        {
+            // Register your own things directly with Autofac here. Don't
+            // call builder.Populate(), that happens in AutofacServiceProviderFactory
+            // for you.
+            builder.RegisterModule(new ContainerModule(Configuration));
         }
 
 
@@ -127,15 +122,15 @@ namespace Passenger.Api
         [Obsolete]
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env, ILoggerFactory loggerFactory, IApplicationLifetime appLifetime)
         {
-            //loggerFactory.AddConsole(Configuration.GetSection("Logging"));
-        // var loggerFactoryZ = LoggerFactory.Create(builder => builder.AddConsole());
-        // var loggerFactory2 = LoggerFactory.Create(builder => builder.AddDebug());
 
+            
 
           var generalSettings = Configuration.GetSettings<GeneralSettings>();
             if (generalSettings.SeedData)
             {
                 app.ApplicationServices.GetService<IDataInitializer>()!.SeedAsync().Wait();
+                 //var dataInitializer = app.ApplicationServices.GetService<IDataInitializer>();
+                //dataInitializer.SeedAsync();
             }    
     
    
@@ -160,7 +155,7 @@ namespace Passenger.Api
            //app.UseMvc();
            var opts = new ExceptionHandlerOptions{ ExceptionHandler = ctx => Task.CompletedTask };
            app.UseExceptionHandler(opts);
-           appLifetime.ApplicationStopped.Register(() => ApplicationContainer.Dispose());
+           //appLifetime.ApplicationStopped.Register(() => ApplicationContainer.Dispose());
         }
     }
 }
