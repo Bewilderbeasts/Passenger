@@ -26,8 +26,6 @@ namespace Passenger.Infrastructure.Services
             var users = await _userService.BrowseAsync();
             if(users.Any())
             {
-                
-
                 return; 
             }
             
@@ -36,7 +34,7 @@ namespace Passenger.Infrastructure.Services
             for(var i = 1; i <=10; i++)
             {
                 var userId = Guid.NewGuid();
-                var username = $"user{i}";
+                var username = $"userz{i}";
 
                 //_logger.LogTrace($"Created a new user: '{username}'.");
                 await _userService.RegisterAsync(userId, $"user{i}@test.com",
@@ -58,8 +56,8 @@ namespace Passenger.Infrastructure.Services
                 var userId = Guid.NewGuid();
                 var username = $"admin{i}";
                 _logger.LogTrace($"Created a new admin: '{username}'.");
-                tasks.Add(_userService.RegisterAsync(userId, $"admin{i}@test.com",
-                    username, "secret", "admin"));
+                await _userService.RegisterAsync(userId, $"admin{i}@test.com",
+                    username, "secret", "admin");
             }
             await Task.WhenAll(tasks);
             _logger.LogTrace("Data initialized.");

@@ -24,7 +24,12 @@ namespace Passenger.Infrastructure.IoC.Modules
 
             builder.RegisterType<JwtHandler>()
                     .As<IJwtHandler>()
-                    .SingleInstance();        
+                    .SingleInstance();
+
+            builder.RegisterType<DataInitializer>()
+                    .As<IDataInitializer>()
+                    .SingleInstance();
+                                    
   
         }
     }

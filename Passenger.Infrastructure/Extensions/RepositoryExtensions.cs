@@ -3,6 +3,7 @@ using System.Threading.Tasks;
 using Microsoft.Extensions.Configuration;
 using Passenger.Core.Domain;
 using Passenger.Core.Repositories;
+using Passenger.Infrastructure.Exceptions;
 
 namespace Passenger.Infrastructure.Extensions
 {
@@ -11,9 +12,10 @@ namespace Passenger.Infrastructure.Extensions
         public static async Task<Driver> GetOrFailAsync(this IDriverRepository repository, Guid userId)
         {
             var driver = await repository.GetAsync(userId);
-            if (driver == null)
+            if(driver == null)
             {
-                throw new Exception($"Driver with id: {userId} was not found.");
+                throw new ServiceException(Passenger.Infrastructure.Exceptions.ErrorCodes.DriverNotFound,
+                   $"Driver with id: {userId} was not found.");
             }
             return driver;
         }
@@ -23,7 +25,8 @@ namespace Passenger.Infrastructure.Extensions
             var user = await repository.GetAsync(userId);
             if (user == null)
             {
-                throw new Exception($"User with id: {userId} was not found.");
+                throw new ServiceException(Passenger.Infrastructure.Exceptions.ErrorCodes.UserNotFound,
+                    $"User with id: {userId} was not found.");
             }
             return user;
         }

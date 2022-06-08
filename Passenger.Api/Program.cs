@@ -2,6 +2,7 @@ using System.IO;
 using Autofac.Extensions.DependencyInjection;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Hosting;
+using MongoDB.Driver;
 
 
 namespace Passenger.Api

@@ -6,7 +6,7 @@ using Passenger.Infrastructure.Services;
 
 namespace Passenger.Infrastructure.Handlers.Drivers
 {
-    public class CreateDriverRouteHandler : ICommand
+    public class CreateDriverRouteHandler : ICommandHandler<CreateDriverRoute>
     {
         private readonly IDriverRouteService _driverRouteService;
         public CreateDriverRouteHandler(IDriverRouteService driverRouteService)

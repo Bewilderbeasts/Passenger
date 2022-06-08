@@ -24,7 +24,11 @@ namespace Passenger.Api.Controllers
         [HttpGet]
         public async Task<IActionResult> Get()
          {
-            var users = await _userService.BrowseAsync();            
+            var users = await _userService.BrowseAsync(); 
+            if (users == null)
+            {
+                return NotFound();
+            }           
          
             return Json(users);
          }

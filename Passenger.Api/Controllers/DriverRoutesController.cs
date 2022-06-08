@@ -3,15 +3,20 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Passenger.Infrastructure.Commands;
 using Passenger.Infrastructure.Commands.Drivers;
+using Passenger.Infrastructure.Services;
 
 namespace Passenger.Api.Controllers
 {
     [Route("drivers/routes")]
     public class DriverRoutesController : ApiControllerBase
     {
-        public DriverRoutesController(ICommandDispatcher commandDispatcher) 
+        private readonly IDriverService _driverService;
+
+        public DriverRoutesController(ICommandDispatcher commandDispatcher,
+            IDriverService driverService) 
             : base(commandDispatcher)
-        {         
+        {
+            _driverService = driverService;
         }
 
         [Authorize]
@@ -22,17 +27,15 @@ namespace Passenger.Api.Controllers
 
             return NoContent();
         }
-        [Authorize]
-        [HttpDelete("{name}")]
-        public async Task<IActionResult> Delete(string name)
+         [Authorize]
+        [HttpDelete]
+        public async Task<IActionResult> Delete([FromBody]CreateDriverRoute command)
         {
-            var command = new DeleteDriverRoute
-            {
-                Name = name
-            };
             await DispatchAsync(command);
 
             return NoContent();
-        }
+        }                
     }
 }
+
+

@@ -25,6 +25,7 @@ using Microsoft.AspNetCore.Diagnostics;
 using Passenger.Infrastructure.Extensions;
 //using NLog.Extensions.Logging;
 using NLog.Web;
+using Passenger.Infrastructure.Mongo;
 
 namespace Passenger.Api
 {
@@ -52,18 +53,20 @@ namespace Passenger.Api
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddControllers();
             services.AddMemoryCache();
             services.AddAuthorization(x => x.AddPolicy("admin", p => p.RequireRole("admin")));
             // Add framework services.
             services.AddMvc()
                 .AddJsonOptions(x => x.JsonSerializerOptions.WriteIndented = true);
             services.AddOptions();
+            
             //services.AddRazorPages();
             
     
             
             services.Configure<JwtSettings>(Configuration.GetSection("JwtSettings"));
-            services.Configure<GeneralSettings>(Configuration.GetSection("general")) ;
+            services.Configure<GeneralSettings>(Configuration.GetSection("General")) ;
 
             var sp = services.BuildServiceProvider();
             var jwtSettings = sp.GetService<JwtSettings>();
@@ -123,19 +126,20 @@ namespace Passenger.Api
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env, ILoggerFactory loggerFactory, IApplicationLifetime appLifetime)
         {
 
-            
+        MongoConfigurator.Initialize();
 
           var generalSettings = Configuration.GetSettings<GeneralSettings>();
             if (generalSettings.SeedData)
             {
-                app.ApplicationServices.GetService<IDataInitializer>()!.SeedAsync().Wait();
-                 //var dataInitializer = app.ApplicationServices.GetService<IDataInitializer>();
-                //dataInitializer.SeedAsync();
+                // app.ApplicationServices.GetService<IDataInitializer>()!.SeedAsync().Wait();
+                var dataInitializer = app.ApplicationServices.GetService<IDataInitializer>();
+                dataInitializer.SeedAsync();
             }    
     
    
         app.UseDeveloperExceptionPage();
 
+        app.UseHttpsRedirection();
         app.UseStaticFiles();
         app.UseRouting();
         app.UseAuthentication();
@@ -149,6 +153,7 @@ namespace Passenger.Api
             
             endpoints.MapControllers();
         });
+        
         //app.UseMiddleware(typeof(ExceptionHandlerMiddleware));
 
         

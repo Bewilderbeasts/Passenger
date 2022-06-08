@@ -19,29 +19,6 @@ namespace Passenger.Api.Controllers
             _jwtHandler = jwtHandler;
         }
         
-        // [Microsoft.AspNetCore.Mvc.Route("")]
-        // [HttpGet]
-        // [Microsoft.AspNetCore.Mvc.Route("token")]
-        // public IActionResult Get()
-        //  {
-        //     var token = _jwtHandler.CreateToken("user1@gmail.com", "user");            
-         
-        //     return Json(token);
-        //  }
-    // [Microsoft.AspNetCore.Mvc.Route("Account")] 
-    // public class AccountContoller : ApiControllerBase
-    // {
-
-    //     private readonly IJwtHandler _jwtHandler;
-    //     public AccountContoller(ICommandDispatcher commandDispatcher,
-    //     IJwtHandler jwtHandler) 
-    //         : base(commandDispatcher)
-    //     {         
-    //         _jwtHandler = jwtHandler;
-    //     }
-
-    
-
        
 
          [HttpPut]

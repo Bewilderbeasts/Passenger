@@ -57,7 +57,7 @@ public class Node
         Address = address;
         UpdatedAt = DateTime.UtcNow;
     }
-    public static Node Create(string address, double longitude, double latitude)
-			=> new Node(address, longitude, latitude);
+    public static Node Create(string address, double latitude, double longitude)
+			=> new Node(address, latitude, longitude);
 }
 

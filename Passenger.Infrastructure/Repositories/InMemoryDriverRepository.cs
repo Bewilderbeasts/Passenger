@@ -10,7 +10,7 @@ namespace Passenger.Infrastructure.Repositories
     public class InMemoryDriverRepository : IDriverRepository
     {
 
-        public static ISet<Driver> _drivers = new HashSet<Driver>();
+        private static readonly ISet<Driver> _drivers = new HashSet<Driver>();
 
         public async Task<Driver> GetAsync(Guid userId)
             =>  await Task.FromResult(_drivers.SingleOrDefault(x => x.UserId == userId));
@@ -24,13 +24,13 @@ namespace Passenger.Infrastructure.Repositories
             => await Task.FromResult(_drivers);
 
 
-        public async Task DeleteAsync(Driver driver)
-        {
-            _drivers.Remove(driver);
-            await Task.CompletedTask;
-        }
         public async Task UpdateAsync(Driver driver)
         {
+            await Task.CompletedTask;
+        }
+         public async Task DeleteAsync(Driver driver)
+        {
+            _drivers.Remove(driver);
             await Task.CompletedTask;
         }
        

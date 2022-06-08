@@ -15,7 +15,6 @@ namespace Passenger.Infrastructure.Handlers.Drivers
         }
         public async Task HandleAsync(CreateDriver command)
         {
-            //implement create driver logic
             await _driverService.CreateAsync(command.UserId);
             var vehicle = command.Vehicle;
             await _driverService.SetVehicle(command.UserId, vehicle.Brand, 

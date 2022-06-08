@@ -9,33 +9,29 @@ public class Driver
 
 		private ISet<Route> _routes = new HashSet<Route>();
         private ISet<DailyRoute> _dailyRoutes = new HashSet<DailyRoute>();
-	
 		public Guid UserId { get; protected set; }
 		public string Name { get; protected set; }
 		public Vehicle Vehicle { get; protected set; }
-
+		public DateTime UpdatedAt {get; private set;}
 		public IEnumerable<Route> Routes
         {
             get { return _routes; }
             set { _routes = new HashSet<Route>(value); }
         }
-		public DateTime UpdatedAt {get; protected set;}
-
 		public IEnumerable<DailyRoute> DailyRoutes 
 		{
 		 get {return _dailyRoutes; }
 		 set { _dailyRoutes = new HashSet<DailyRoute>(value);}
 		}
-
 		protected Driver()
 		{
 
 		}
 
-		public Driver ( User User)
+		public Driver ( User user)
 		{
-			UserId = User.Id;
-			Name = User.Username;
+			UserId = user.Id;
+			Name = user.Username;
 			
 		}
 

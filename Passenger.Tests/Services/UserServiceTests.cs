@@ -35,7 +35,7 @@ namespace Passenger.Tests.Services
             var userService = new UserService(userRepositoryMock.Object, encrypterMock.Object, mapperMock.Object);
             await userService.GetAsync("user1@email.com");
 
-            var user = new User(Guid.NewGuid(), "user1@email.com", "user1", "secret", "user","salt");
+            var user = new User(Guid.NewGuid(), "user123@email.com", "user1", "secret", "user","salt");
 
             userRepositoryMock.Setup(x => x.GetAsync(It.IsAny<string>()))
                                         .ReturnsAsync(user);

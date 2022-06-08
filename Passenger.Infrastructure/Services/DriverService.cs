@@ -17,10 +17,9 @@ namespace Passenger.Infrastructure.Services
         private readonly IVehicleProvider _vehicleProvider;
         private readonly IMapper _mapper;
     
-        public DriverService(IDriverRepository driverRepository, 
-                            IMapper mapper,
-                            IUserRepository userRepository,
-                            IVehicleProvider vehicleProvider)
+        public DriverService(IDriverRepository driverRepository,
+            IUserRepository userRepository,
+            IVehicleProvider vehicleProvider, IMapper mapper)
         {
             _driverRepository = driverRepository;
             _userRepository = userRepository;
@@ -32,14 +31,14 @@ namespace Passenger.Infrastructure.Services
         {
             var driver = await _driverRepository.GetAsync(userId);
             
-            return _mapper.Map<DriverDetailsDto>(driver);
+            return _mapper.Map<Driver,DriverDetailsDto>(driver);
         }
 
         public async Task<IEnumerable<DriverDto>> BrowseAsync()
         {
             var drivers = await _driverRepository.GetAllAsync();
 
-            return _mapper.Map<IEnumerable<DriverDto>>(drivers);
+             return _mapper.Map<IEnumerable<Driver>,IEnumerable<DriverDto>>(drivers);
         }
 
         public async Task CreateAsync(Guid userId)
@@ -48,7 +47,7 @@ namespace Passenger.Infrastructure.Services
             var driver = await _driverRepository.GetAsync(userId);
             if (driver != null)
             {
-                throw new ServiceException(Infrastructure.Exceptions.ErrorCodes.DriverAlreadyExists ,$"Driver with id: {userId} already exists.");
+                throw new Exception($"Driver with user id: '{userId}' already exists.");
             }
             driver = new Driver(user);
             await _driverRepository.AddAsync(driver);
@@ -58,7 +57,7 @@ namespace Passenger.Infrastructure.Services
         {
             var driver = await _driverRepository.GetOrFailAsync(userId);
             var vehicleDetails = await _vehicleProvider.GetAsync(brand, name);
-            var vehicle = Vehicle.Create(brand, name, vehicleDetails.Seats);
+            var vehicle = Vehicle.Create(vehicleDetails.Brand, vehicleDetails.Name, vehicleDetails.Seats);
             driver.SetVehicle(vehicle);
             
         }
