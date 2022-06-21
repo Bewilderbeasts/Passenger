@@ -148,7 +148,7 @@ namespace Passenger.Api
         
         app.UseEndpoints(endpoints =>
         {
-            endpoints.MapControllerRoute("account/token", "{controller=Account}/{action=Get}");
+           
             endpoints.MapControllerRoute("account/password", "{controller=Account}/{action=Put}");
             
             endpoints.MapControllers();

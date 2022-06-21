@@ -19,8 +19,6 @@ namespace Passenger.Api.Controllers
             _jwtHandler = jwtHandler;
         }
         
-       
-
          [HttpPut]
          [Route("password")]
          public async Task<IActionResult> Put([FromBody]ChangeUserPassword command)

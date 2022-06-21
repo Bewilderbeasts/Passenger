@@ -34,7 +34,7 @@ namespace Passenger.Infrastructure.Services
             for(var i = 1; i <=10; i++)
             {
                 var userId = Guid.NewGuid();
-                var username = $"userz{i}";
+                var username = $"user{i}";
 
                 //_logger.LogTrace($"Created a new user: '{username}'.");
                 await _userService.RegisterAsync(userId, $"user{i}@test.com",

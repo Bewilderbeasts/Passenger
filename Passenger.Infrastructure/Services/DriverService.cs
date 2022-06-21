@@ -44,6 +44,10 @@ namespace Passenger.Infrastructure.Services
         public async Task CreateAsync(Guid userId)
         {
             var user = await _userRepository.GetOrFailAsync(userId);
+            if (user == null)
+            {
+                throw new Exception($"User with user id: '{userId}' was not found.");
+            }
             var driver = await _driverRepository.GetAsync(userId);
             if (driver != null)
             {
